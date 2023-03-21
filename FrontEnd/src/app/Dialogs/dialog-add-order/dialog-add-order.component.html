@@ -1,0 +1,116 @@
+<h2 mat-dialog-title>{{titleAction}} Order</h2>
+<!-- <button mat-mini-fab (click)="addOrderDetail()">
+    <mat-icon class="add-course-btn">add</mat-icon>
+  </button>   -->
+<div mat-dialog-content>
+    <form [formGroup] = "Orderform">
+         <mat-grid-list cols="1" rowHeight="90" >
+         <mat-grid-tile>
+                <mat-form-field appearance="fill">
+                    <mat-label>Employee</mat-label>
+                    <mat-select formControlName="empid">
+                      <mat-option *ngFor="let item of employeeList" [value]="item.empid">
+                        {{item.fullName}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline">
+                    <mat-label>Shipper</mat-label>
+                    <mat-select formControlName="shipperId">
+                      <mat-option *ngFor="let item of shipperList" [value]="item.shipperId">
+                        {{item.companyName}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline">
+                    <mat-label>ShipName</mat-label>
+                    <input matInput formControlName="shipName">
+                    </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline">
+                    <mat-label>ShipAddress</mat-label>
+                    <input matInput formControlName="shipAddress">
+                  </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline">
+                    <mat-label>ShipCity</mat-label>
+                    <input matInput formControlName="shipCity">
+                  </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline">
+                    <mat-label>ShipCountry</mat-label>
+                    <input matInput formControlName="shipCountry">
+                  </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline">
+                    <mat-label>Order Date</mat-label>
+                    <input matInput [matDatepicker]="picker1" formControlName="orderDate">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline">
+                    <mat-label>Require Date</mat-label>
+                    <input matInput [matDatepicker]="picker2" formControlName="requiredDate">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field> 
+            </mat-grid-tile>            
+            <mat-grid-tile>
+                <mat-form-field appearance="outline">
+                    <mat-label>Shipped Date</mat-label>
+                    <input matInput [matDatepicker]="picker3" formControlName="shippedDate">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                </mat-form-field>           
+            </mat-grid-tile>                                        
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" floatLabel="always">
+                    <mat-label>Freight</mat-label>
+                    <input matInput type="number" class="example-right-align" placeholder="0" formControlName="freight">
+                    <span matTextPrefix>$&nbsp;</span>
+                    <span matTextSuffix>.00</span>
+                </mat-form-field>
+            </mat-grid-tile> 
+        <!-- </mat-grid-list>   -->
+        <!-- <mat-grid-list cols="3" rowHeight="80px;"> -->
+        <!--    
+            <ng-container mat-dialog-content formArrayName="orderdetails">
+                <ng-container *ngFor="let ordenDetailForm of orderdetails.controls; let i = index">
+                    <form [formGroup]="orderDetailForm">
+                        <mat-grid-tile>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Product</mat-label>
+                                <input matInput formControlName="productId">
+                              </mat-form-field>
+                        </mat-grid-tile>
+
+                         <mat-icon class="delete-btn" (click)="deleteOrderDetail(i)">
+                            delete_forever</mat-icon> 
+                            <mat-grid-tile>
+              
+                            <button mat-icon-button color="warn" (click)="deleteOrderDetail(i)">
+                                <mat-icon>favorite</mat-icon>
+                              </button>                  
+                        </mat-grid-tile>
+                    </form>
+                </ng-container>
+            </ng-container> 
+        -->
+
+          </mat-grid-list>          
+    </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close color="warm">Close</button>
+  <button mat-raised-button  color="primary" (click)="addOrder()">{{buttonAction}}</button>
+</div>
