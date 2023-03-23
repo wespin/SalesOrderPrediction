@@ -148,7 +148,7 @@ namespace WebApi.Repository
             order.Add(oOrderDetail);
             string SaleOrderXML = order.ToString();
 
-            var query = "sp_Sales_Order_Insert";
+            var query = "sp_Sales_Order_Insertar";
             var command = CreateCommand(query);
 
             command.CommandType = CommandType.StoredProcedure;

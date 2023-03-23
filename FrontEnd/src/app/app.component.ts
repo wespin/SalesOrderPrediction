@@ -44,11 +44,13 @@ export class AppComponent implements AfterViewInit, OnInit {
     }); 
   }
 
-  openDialog() {
+  openDialog(dataOrder: OrderList) {
+    debugger;
     this.dialog.open(DialogAddOrderComponent, {
       disableClose: true
       ,height: '1000px',
       width: '800px',
+      data: dataOrder      
     }).afterClosed().subscribe(result =>{
       if(result === "create"){
         this.showOrders();

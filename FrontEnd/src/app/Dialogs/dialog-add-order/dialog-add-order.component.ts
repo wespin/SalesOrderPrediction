@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, FormGroupName } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import {MatGridListModule} from '@angular/material/grid-list';
 
@@ -19,6 +19,7 @@ import { EmployeeService } from 'src/app/Services/employee.service';
 import { ShipperService } from 'src/app/Services/shipper.service';
 import { ProductService } from 'src/app/Services/product.service';
 import { OrderService } from 'src/app/Services/order.service';
+import { OrderList } from 'src/app/Interfaces/order-list';
 
 export const MY_DATE_FORMATS = {
   parse:{
@@ -42,11 +43,13 @@ export const MY_DATE_FORMATS = {
 })
 export class DialogAddOrderComponent implements OnInit {
   Orderform:FormGroup;
+  customerName:string = "";
+  customerId:number = 0;
   titleAction:string = "New";
   buttonAction:string ="Save";
   employeeList: Employee[]=[];
   shipperList: Shipper[]=[];
-  produtList: Product[]=[];
+  productList: Product[]=[];
   orderdetailWP: OrderDetail[]=[]
 
   orderDetailForm = this.fb.group({
@@ -58,6 +61,8 @@ export class DialogAddOrderComponent implements OnInit {
   })
 
 
+
+
   constructor(
     private referenceDialog: MatDialogRef<DialogAddOrderComponent>,
     private fb: FormBuilder,
@@ -65,7 +70,8 @@ export class DialogAddOrderComponent implements OnInit {
     private _employeeService: EmployeeService,
     private _shipperService: ShipperService,
     private _productService: ProductService,
-    private _orderService: OrderService
+    private _orderService: OrderService,
+    @Inject (MAT_DIALOG_DATA) public dataOrder:OrderList
     ) 
     {
 
@@ -81,12 +87,11 @@ export class DialogAddOrderComponent implements OnInit {
         shippedDate :[''],
         freight: [''],
         shipCountry: [''],
+        productId: [''],
+        unitprice: [''],
+        quantity: [''],
+        discount: [''],
         orderdetails: this.fb.array([])
-
-
-
-
-
       })
 
       this._employeeService.getList().subscribe({
@@ -99,21 +104,25 @@ export class DialogAddOrderComponent implements OnInit {
         next:(dataResponse) => {
           this.shipperList = dataResponse;
         },error:(e) => { console.log(e)}
-      });       
+      });
+      
+      this._productService.getList().subscribe({
+        next:(dataResponse) => {
+          this.productList = dataResponse;
+        },error:(e) => { console.log(e)}
+      });    
     }
   
     get orderdetails() {
       return this.Orderform.controls["orderdetails"] as FormArray;
     }
-
     
-    addOrderDetail() {
-
-    
+    addOrderDetail() {    
       console.log('paso ' + this.orderDetailForm)
 
       this.orderdetails.push(this.orderDetailForm);
     }
+    
     deleteOrderDetail(orderDetailIndex: number) {
       this.orderdetails.removeAt(orderDetailIndex);
   }
@@ -129,11 +138,20 @@ export class DialogAddOrderComponent implements OnInit {
 
   addOrder()
   {
-    
+    debugger;
     console.log(this.Orderform.value)
 
     //PARA usar encima del boton
     // [disable]="Orderform.ivalid"
+
+    const pepe: OrderDetail = {
+      productid: this.Orderform.value.productId,
+      unitprice: Number(this.Orderform.value.unitprice),
+      qty: Number(this.Orderform.value.quantity),
+      discount: Number(this.Orderform.value.discount)
+    }  
+
+    this.orderdetailWP.push(pepe);
 
     const modelo: OrderCreate = {
       empid: this.Orderform.value.empid,
@@ -144,7 +162,7 @@ export class DialogAddOrderComponent implements OnInit {
       orderdate: moment(this.Orderform.value.orderdate).format("YYYY-MM-DD"),
       requireddate:  moment(this.Orderform.value.requireddate).format("YYYY-MM-DD"),
       shippeddate : moment(this.Orderform.value.shippeddate).format("YYYY-MM-DD"),
-      freight: this.Orderform.value.freight,
+      freight: Number(this.Orderform.value.freight),
       shipcountry: this.Orderform.value.shipCountry,
       detail: this.orderdetailWP //this.Orderform.value.orderDetails.array([])
       }
@@ -161,6 +179,10 @@ export class DialogAddOrderComponent implements OnInit {
     }
 
     ngOnInit(): void {
+      if(this.dataOrder){
+        this.customerName = this.dataOrder.customerName;
+        this.customerId = this.dataOrder.custId;
+      }
     }
   }
 
